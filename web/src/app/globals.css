@@ -272,8 +272,12 @@ h3 {
 
 .logo-name {
   font-size: 17px;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.02em;
+}
+
+.logo-name strong {
+  font-weight: 800;
 }
 
 .nav {

@@ -13,14 +13,9 @@
     "networks": "hardhat run scripts/list-networks.ts",
     "deploy:networks": "hardhat run scripts/deploy-networks.ts",
     "deploy:rehearsal": "hardhat run scripts/deploy.ts",
-    "deploy:polygon-amoy": "hardhat run scripts/deploy.ts --network polygonAmoy",
-    "deploy:polygon": "hardhat run scripts/deploy.ts --network polygon",
-    "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
-    "deploy:base-sepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
     "export-abis": "hardhat run scripts/export-abis.ts",
     "dev:advance-time": "hardhat run scripts/dev-advance-time.ts --network localhost",
-    "dev:simulate-yield": "hardhat run scripts/dev-simulate-yield.ts --network localhost",
-    "size": "hardhat run scripts/contract-sizes.ts"
+    "dev:simulate-yield": "hardhat run scripts/dev-simulate-yield.ts --network localhost"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "5.0.0",
