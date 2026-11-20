@@ -1,0 +1,24 @@
+{
+  "name": "cryptolock-indexer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Indexes protocol events into SQLite and serves activity and signed user preferences.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "viem": "2.57.20"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "5.9.3"
+  }
+}

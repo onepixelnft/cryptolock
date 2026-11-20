@@ -1,0 +1,13 @@
+{
+  "name": "cryptolock-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "End-to-end test of the web app against a local Hardhat node, driven in headless Chrome.",
+  "type": "module",
+  "scripts": {
+    "test": "node run.mjs"
+  },
+  "devDependencies": {
+    "puppeteer-core": "25.17.0"
+  }
+}
