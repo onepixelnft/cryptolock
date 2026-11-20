@@ -200,26 +200,20 @@ async function scenario(browser) {
     await shot("02-dashboard");
   });
 
-  await step("network list: main network (Polygon) first, search among all supported networks", async () => {
+  await step("network list: Polygon only, plus the local development network", async () => {
     await click("Hardhat", { scope: ".header" });
-    await page.waitForSelector(".modal .search input");
     await page.waitForFunction(
       () => {
-        const group = [...document.querySelectorAll(".modal .network-group")].find((g) => g.textContent?.includes("Main networks"));
-        const first = group?.querySelector(".option-row")?.textContent ?? "";
-        return first.includes("Polygon") && first.includes("Main network");
+        const rows = [...document.querySelectorAll(".modal .option-row")].map((row) => row.textContent ?? "");
+        return (
+          rows.length === 2 &&
+          rows.some((row) => row.includes("Polygon") && row.includes("Main network")) &&
+          rows.some((row) => row.includes("Hardhat") && row.includes("Local"))
+        );
       },
       { timeout: 10_000 },
     );
-    await page.type(".modal .search input", "arbitrum");
-    await page.waitForFunction(
-      () => {
-        const text = document.querySelector(".modal")?.innerText ?? "";
-        return text.includes("Arbitrum One") && text.includes("Arbitrum Sepolia") && !text.includes("Polygon");
-      },
-      { timeout: 10_000 },
-    );
-    await shot("02b-network-search");
+    await shot("02b-network-list");
     await page.keyboard.press("Escape");
     await page.waitForFunction(() => !document.querySelector(".modal"), { timeout: 5_000 });
   });

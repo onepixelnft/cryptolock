@@ -46,7 +46,6 @@ export const config = {
 const DEFAULT_RPC: Record<number, string> = {
   31337: "http://127.0.0.1:8545",
   137: "https://polygon-bor-rpc.publicnode.com",
-  80002: "https://polygon-amoy-bor-rpc.publicnode.com",
 };
 
 export function rpcUrl(chainId: number): string | undefined {
@@ -54,7 +53,7 @@ export function rpcUrl(chainId: number): string | undefined {
   return fromEnv || DEFAULT_RPC[chainId];
 }
 
-const DEFAULT_CONFIRMATIONS: Record<number, number> = { 137: 16, 80002: 16 };
+const DEFAULT_CONFIRMATIONS: Record<number, number> = { 137: 16 };
 export function confirmationsFor(chainId: number, isLocal: boolean): number {
   if (isLocal) return 0;
   if (process.env.CONFIRMATIONS !== undefined && process.env.CONFIRMATIONS !== "") return config.confirmations;

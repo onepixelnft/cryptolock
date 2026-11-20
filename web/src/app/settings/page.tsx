@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useDisconnect, useSignMessage } from "wagmi";
 import { ConnectButton } from "@/components/ConnectButton";
+import { GITHUB_URL } from "@/components/Footer";
 import { IconShield } from "@/components/Icons";
 import { NetworkList } from "@/components/NetworkButton";
 import { AddressLink, DetailRow, Notice, SectionHead } from "@/components/ui";
@@ -236,6 +237,12 @@ export default function SettingsPage() {
               <strong>{t("settings.security")}</strong>
             </span>
           </Link>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="option-row">
+            <span className="option-text">
+              <strong>{t("settings.sourceCode")}</strong>
+              <span className="muted small">github.com/onepixelnft/cryptolock</span>
+            </span>
+          </a>
         </div>
       </section>
 

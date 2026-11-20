@@ -10,12 +10,12 @@
     "node": "hardhat node",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
     "deploy": "hardhat run scripts/deploy.ts --network",
-    "networks": "hardhat run scripts/list-networks.ts",
     "deploy:networks": "hardhat run scripts/deploy-networks.ts",
     "deploy:rehearsal": "hardhat run scripts/deploy.ts",
     "export-abis": "hardhat run scripts/export-abis.ts",
     "dev:advance-time": "hardhat run scripts/dev-advance-time.ts --network localhost",
-    "dev:simulate-yield": "hardhat run scripts/dev-simulate-yield.ts --network localhost"
+    "dev:simulate-yield": "hardhat run scripts/dev-simulate-yield.ts --network localhost",
+    "admin": "hardhat run scripts/admin.ts --network polygon"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "5.0.0",

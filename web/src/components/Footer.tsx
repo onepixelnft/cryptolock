@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
 
+export const GITHUB_URL = "https://github.com/onepixelnft/cryptolock";
+
 export function Footer() {
   const { t } = useI18n();
   return (
@@ -13,6 +15,9 @@ export function Footer() {
           <Link href="/docs">{t("footer.docs")}</Link>
           <Link href="/terms">{t("footer.terms")}</Link>
           <Link href="/security">{t("footer.security")}</Link>
+          <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
         </nav>
       </div>
     </footer>

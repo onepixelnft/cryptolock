@@ -14,13 +14,12 @@ test("Polygon is indexed out of the box, with more confirmations than other netw
     delete process.env.RPC_URL_137;
     delete process.env.CONFIRMATIONS;
     assert.match(rpcUrl(137) ?? "", /^https:\/\//);
-    assert.match(rpcUrl(80002) ?? "", /^https:\/\//);
     assert.equal(rpcUrl(31337), "http://127.0.0.1:8545");
     assert.equal(rpcUrl(42161), undefined);
     process.env.RPC_URL_137 = " https://polygon.example/key ";
     assert.equal(rpcUrl(137), "https://polygon.example/key");
     assert.equal(confirmationsFor(137, false), 16);
-    assert.equal(confirmationsFor(11155111, false), 2);
+    assert.equal(confirmationsFor(42161, false), 2);
     assert.equal(confirmationsFor(31337, true), 0);
   } finally {
     if (saved.rpc === undefined) delete process.env.RPC_URL_137;
@@ -160,7 +159,7 @@ test("the rate limiter allows a fixed number of requests per window and client",
 
 test("sync errors never expose RPC URLs (which often contain API keys)", () => {
   const message = describeSyncError(
-    new Error("HTTP request failed.\n\nURL: https://eth-sepolia.example.com/v2/SECRET_KEY\nRequest body: {}"),
+    new Error("HTTP request failed.\n\nURL: https://polygon-mainnet.example.com/v2/SECRET_KEY\nRequest body: {}"),
   );
   assert.equal(message, "HTTP request failed.");
   assert.equal(describeSyncError(new Error("fetch https://rpc.example.com/v3/SECRET_KEY failed")).includes("SECRET"), false);

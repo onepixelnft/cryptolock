@@ -1,44 +1,23 @@
 import { createConfig, fallback, http, injected, type Transport } from "wagmi";
 import { walletConnect } from "@wagmi/walletconnect-connector";
-import { base, baseSepolia, hardhat, mainnet, polygon, polygonAmoy, sepolia } from "wagmi/chains";
+import { polygon } from "wagmi/chains";
 import { chains, type SupportedChainId } from "./chains";
 
 export const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ?? "";
 
-function rpcOverrides(): Record<string, string> {
-  try {
-    const parsed = JSON.parse(process.env.NEXT_PUBLIC_RPC_URLS || "{}") as unknown;
-    return parsed && typeof parsed === "object" ? (parsed as Record<string, string>) : {};
-  } catch {
-    return {};
-  }
-}
-
 const nonEmpty = (value: string | undefined) => (value && value.trim().length > 0 ? value.trim() : undefined);
 
-const NAMED_RPC: Partial<Record<number, string | undefined>> = {
-  [hardhat.id]: nonEmpty(process.env.NEXT_PUBLIC_LOCAL_RPC_URL) ?? "http://127.0.0.1:8545",
-  [polygon.id]: nonEmpty(process.env.NEXT_PUBLIC_POLYGON_RPC_URL),
-  [polygonAmoy.id]: nonEmpty(process.env.NEXT_PUBLIC_POLYGON_AMOY_RPC_URL),
-  [sepolia.id]: nonEmpty(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL),
-  [baseSepolia.id]: nonEmpty(process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL),
-  [mainnet.id]: nonEmpty(process.env.NEXT_PUBLIC_MAINNET_RPC_URL),
-  [base.id]: nonEmpty(process.env.NEXT_PUBLIC_BASE_RPC_URL),
-};
+const appUrl = nonEmpty(process.env.NEXT_PUBLIC_APP_URL) ?? "http://localhost:3000";
 
-const BACKUP_RPC: Partial<Record<number, string[]>> = {
-  [polygon.id]: ["https://polygon-bor-rpc.publicnode.com", "https://polygon.drpc.org"],
-  [polygonAmoy.id]: ["https://polygon-amoy-bor-rpc.publicnode.com", "https://polygon-amoy.drpc.org"],
-};
-
-const overrides = rpcOverrides();
+const POLYGON_RPC = [
+  nonEmpty(process.env.NEXT_PUBLIC_POLYGON_RPC_URL),
+  "https://polygon-bor-rpc.publicnode.com",
+  "https://polygon.drpc.org",
+].filter((url): url is string => !!url);
 
 function transportFor(chainId: number): Transport {
-  const configured = nonEmpty(overrides[String(chainId)]) ?? NAMED_RPC[chainId];
-  const backups = BACKUP_RPC[chainId];
-  if (!backups) return http(configured);
-  const urls = [...new Set([...(configured ? [configured] : []), ...backups])];
-  return fallback(urls.map((url) => http(url)));
+  if (chainId === polygon.id) return fallback([...new Set(POLYGON_RPC)].map((url) => http(url)));
+  return http(nonEmpty(process.env.NEXT_PUBLIC_LOCAL_RPC_URL) ?? "http://127.0.0.1:8545");
 }
 
 const transports = Object.fromEntries(chains.map((chain) => [chain.id, transportFor(chain.id)])) as Record<
@@ -57,9 +36,9 @@ export const wagmiConfig = createConfig({
             showQrModal: true,
             metadata: {
               name: "CryptoLock",
-              description: "Lock your crypto, your NFTs or your wallet for a fixed period, on-chain.",
-              url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-              icons: [],
+              description: "Lock your crypto, your NFTs or your wallet for a fixed period, on Polygon.",
+              url: appUrl,
+              icons: [`${appUrl.replace(/\/$/, "")}/apple-icon.png`],
             },
           }),
         ]

@@ -8,24 +8,15 @@ dotenv.config();
 const deployerKey = process.env.DEPLOYER_PRIVATE_KEY?.trim();
 const accounts = deployerKey ? [deployerKey] : [];
 
-const LEGACY_RPC: Record<number, string | undefined> = {
-  11155111: process.env.SEPOLIA_RPC_URL,
-  84532: process.env.BASE_SEPOLIA_RPC_URL,
-};
-
 const liveNetworks: NonNullable<HardhatUserConfig["networks"]> = {};
 for (const net of Object.values(LIVE_NETWORKS)) {
-  const url =
-    process.env[`RPC_URL_${net.chain.id}`]?.trim() ||
-    LEGACY_RPC[net.chain.id]?.trim() ||
-    net.rpcUrl ||
-    net.chain.rpcUrls.default.http[0];
+  const url = process.env[`RPC_URL_${net.chain.id}`]?.trim() || net.rpcUrl || net.chain.rpcUrls.default.http[0];
   liveNetworks[net.key] = { url, accounts, chainId: net.chain.id };
 }
 
 const forkTarget = process.env.FORK_NETWORK?.trim();
 const forked = forkTarget ? findNetwork(forkTarget) : undefined;
-if (forkTarget && !forked) throw new Error(`FORK_NETWORK: unknown network "${forkTarget}" (see npm run networks)`);
+if (forkTarget && !forked) throw new Error(`FORK_NETWORK: unknown network "${forkTarget}" (only "polygon" is supported)`);
 const forkUrl =
   process.env.FORK_URL?.trim() ||
   (forked ? process.env[`RPC_URL_${forked.chain.id}`]?.trim() || forked.chain.rpcUrls.default.http[0] : "");

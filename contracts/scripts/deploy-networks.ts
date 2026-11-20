@@ -2,7 +2,7 @@ import { spawnSync } from "node:child_process";
 import hre from "hardhat";
 import { createPublicClient, formatUnits, http } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import { type LiveNetworkConfig, PRIMARY_NETWORK_KEY, PRIMARY_TESTNET_KEY, findNetwork, orderedNetworks } from "./networks";
+import { type LiveNetworkConfig, PRIMARY_NETWORK_KEY, findNetwork, orderedNetworks } from "./networks";
 import { PROTOCOL_VERSION, readDeployments, readPendingDeployment } from "./lib/deployment-file";
 
 const DEPLOY_GAS = 11_500_000n;
@@ -23,8 +23,6 @@ interface Row {
 }
 
 function label(net: LiveNetworkConfig): string {
-  if (net.key === PRIMARY_NETWORK_KEY) return `${net.chain.name} (main network)`;
-  if (net.key === PRIMARY_TESTNET_KEY) return `${net.chain.name} (main network testnet)`;
   return net.chain.name;
 }
 
@@ -49,7 +47,7 @@ function selectTargets(target: string): LiveNetworkConfig[] {
       return all;
     default: {
       const net = findNetwork(target);
-      if (!net) throw new Error(`Unknown network "${target}". See the list: npm run networks`);
+      if (!net) throw new Error(`Unknown network "${target}": only "polygon" is supported.`);
       return [net];
     }
   }

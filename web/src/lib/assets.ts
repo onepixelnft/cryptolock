@@ -19,12 +19,7 @@ export function assetKey(address: string): string {
   return address.toLowerCase() === NATIVE ? "native" : address.toLowerCase();
 }
 
-const NATIVE_MIRRORS = new Set([
-  "0x0000000000000000000000000000000000001010",
-  "0x0000000000000000000000000000000000000802",
-  "0x471ece3750da237f93b8e339c536989b8978a438",
-  "0xdeaddeaddeaddeaddeaddeaddeaddeaddead0000",
-]);
+const NATIVE_MIRRORS = new Set(["0x0000000000000000000000000000000000001010"]);
 
 export function isNativeMirror(address: string): boolean {
   return NATIVE_MIRRORS.has(address.toLowerCase());

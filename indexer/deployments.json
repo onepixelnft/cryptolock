@@ -291,7 +291,7 @@
     "protocolVersion": 3,
     "isLocal": true,
     "deployBlock": 1,
-    "deployedAt": "2026-11-20T18:25:13.040Z",
+    "deployedAt": "2026-11-20T20:06:18.046Z",
     "contracts": {
       "protocolConfig": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318",
       "lockVault": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",

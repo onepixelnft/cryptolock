@@ -377,13 +377,6 @@ export const fr: Record<TKey, string> = {
   "duration.minutes": "{n} minutes",
   "duration.oneMinute": "1 minute",
   "duration.daysPrecise": "{n} j",
-
-  "network.search": "Rechercher un réseau, un chain id ou une monnaie",
-  "network.groupAvailable": "Disponibles",
-  "network.groupMainnets": "Réseaux principaux — pas encore déployés",
-  "network.groupTestnets": "Réseaux de test — pas encore déployés",
-  "network.noResults": "Aucun réseau ne correspond à votre recherche.",
-  "network.testnet": "Testnet",
   "network.localTag": "Local",
 
   "type.nft": "NFT Lock",
@@ -466,7 +459,6 @@ export const fr: Record<TKey, string> = {
   "notFound.title": "Cette page n'existe pas.",
   "walletPage.depositGasReserve": "Une petite somme est conservée dans votre wallet pour payer les frais réseau de ce transfert.",
   "network.primaryTag": "Réseau principal",
-  "network.primaryTestTag": "Réseau de test du principal",
   "error.NativeTokenAlias": "Ce token est la monnaie native du réseau sous forme de token. Verrouillez directement la monnaie native : elle est en tête de liste.",
   "create.asset.detected": "Les tokens de votre wallet sont détectés automatiquement. Un token manque ? Ajoutez-le par l'adresse de son contrat ci-dessous.",
   "create.asset.detectionOff": "La détection automatique des tokens est désactivée (Paramètres). Tout token peut quand même être ajouté par l'adresse de son contrat ci-dessous.",
@@ -474,7 +466,8 @@ export const fr: Record<TKey, string> = {
   "create.asset.nativeMirror": "Cette adresse est la monnaie native sous forme de token : verrouillez directement la monnaie native, en tête de liste.",
   "settings.tokens": "Tokens",
   "settings.detectTokens": "Détecter les tokens de mon wallet",
-  "settings.detectTokensHint": "Télécharge des listes publiques de tokens (CoinGecko, Uniswap, Superchain) au plus une fois par jour, puis lit vos soldes sur la blockchain. Votre adresse n'est jamais envoyée à ces listes.",
+  "settings.detectTokensHint": "Télécharge la liste publique de tokens Polygon de CoinGecko au plus une fois par jour, puis lit vos soldes sur la blockchain. Votre adresse n'est jamais envoyée à CoinGecko.",
   "detail.valueChange": "Variation du solde",
   "detail.valueChangeHint": "Les soldes de ce token varient d'eux-mêmes (rebasage, réflexions…) : le verrouillage en reçoit sa part.",
+  "settings.sourceCode": "Code source (GitHub)",
 };

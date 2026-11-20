@@ -7,67 +7,9 @@ export interface ListedToken {
   decimals: number;
 }
 
-const COINGECKO_PLATFORMS: Record<number, string> = {
-  1: "ethereum",
-  10: "optimistic-ethereum",
-  25: "cronos",
-  30: "rootstock",
-  40: "telos",
-  56: "binance-smart-chain",
-  100: "xdai",
-  122: "fuse",
-  130: "unichain",
-  137: "polygon-pos",
-  143: "monad",
-  146: "sonic",
-  169: "manta-pacific",
-  196: "x-layer",
-  204: "opbnb",
-  252: "fraxtal",
-  288: "boba",
-  360: "shape",
-  480: "world-chain",
-  747: "flow-evm",
-  999: "hyperevm",
-  1088: "metis-andromeda",
-  1284: "moonbeam",
-  1285: "moonriver",
-  1329: "sei-v2",
-  1868: "soneium",
-  1923: "swellchain",
-  2222: "kava",
-  2818: "morph-l2",
-  4326: "megaeth",
-  5000: "mantle",
-  5330: "superseed",
-  8217: "klay-token",
-  8453: "base",
-  8822: "iota-evm",
-  9745: "plasma",
-  33139: "apechain",
-  34443: "mode",
-  42161: "arbitrum-one",
-  42170: "arbitrum-nova",
-  42220: "celo",
-  43111: "hemi",
-  43114: "avalanche",
-  48900: "zircuit",
-  57073: "ink",
-  59144: "linea",
-  80094: "berachain",
-  81457: "blast",
-  534352: "scroll",
-  747474: "katana",
-  7777777: "zora-network",
-  21000000: "corn",
-  666666666: "degen",
-  1313161554: "aurora",
+const DEFAULT_LISTS: Record<number, string[]> = {
+  137: ["https://tokens.coingecko.com/polygon-pos/all.json"],
 };
-
-const UNISWAP_LIST = "https://tokens.uniswap.org";
-const UNISWAP_CHAINS = new Set([130, 11155111]);
-const SUPERCHAIN_LIST = "https://static.optimism.io/optimism.tokenlist.json";
-const SUPERCHAIN_CHAINS = new Set([1135, 1750, 4202, 84532, 11155111, 11155420]);
 
 const CACHE_PREFIX = "lock.tokenList.v1.";
 const CACHE_TTL_MS = 24 * 3_600_000;
@@ -87,14 +29,7 @@ function overrides(): Record<string, string[]> {
 }
 
 export function tokenListUrls(chainId: number): string[] {
-  const custom = overrides()[String(chainId)];
-  if (custom) return custom;
-  const urls: string[] = [];
-  const platform = COINGECKO_PLATFORMS[chainId];
-  if (platform) urls.push(`https://tokens.coingecko.com/${platform}/all.json`);
-  if (UNISWAP_CHAINS.has(chainId)) urls.push(UNISWAP_LIST);
-  if (SUPERCHAIN_CHAINS.has(chainId)) urls.push(SUPERCHAIN_LIST);
-  return urls;
+  return overrides()[String(chainId)] ?? DEFAULT_LISTS[chainId] ?? [];
 }
 
 function parseEntry(raw: unknown, chainId: number): ListedToken | null {

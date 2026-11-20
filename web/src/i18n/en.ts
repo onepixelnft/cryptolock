@@ -375,13 +375,6 @@ export const en = {
   "duration.minutes": "{n} minutes",
   "duration.oneMinute": "1 minute",
   "duration.daysPrecise": "{n} d",
-
-  "network.search": "Search a network, chain id or coin",
-  "network.groupAvailable": "Available",
-  "network.groupMainnets": "Main networks — not deployed yet",
-  "network.groupTestnets": "Test networks — not deployed yet",
-  "network.noResults": "No network matches your search.",
-  "network.testnet": "Testnet",
   "network.localTag": "Local",
 
   "type.nft": "NFT Lock",
@@ -464,7 +457,6 @@ export const en = {
   "notFound.title": "This page does not exist.",
   "walletPage.depositGasReserve": "A small amount is kept in your wallet to pay the network fee of this transfer.",
   "network.primaryTag": "Main network",
-  "network.primaryTestTag": "Test network of the main network",
   "error.NativeTokenAlias": "This token is the network's native coin in token form. Lock the native coin itself instead: it is first in the list.",
   "create.asset.detected": "The tokens your wallet holds are detected automatically. A token is missing? Add it by its contract address below.",
   "create.asset.detectionOff": "Automatic token detection is off (Settings). Any token can still be added by its contract address below.",
@@ -472,9 +464,10 @@ export const en = {
   "create.asset.nativeMirror": "This address is the native coin in token form: lock the native coin itself, first in the list.",
   "settings.tokens": "Tokens",
   "settings.detectTokens": "Detect the tokens my wallet holds",
-  "settings.detectTokensHint": "Downloads public token lists (CoinGecko, Uniswap, Superchain) at most once a day, then reads your balances on the blockchain. Your address is never sent to these lists.",
+  "settings.detectTokensHint": "Downloads the public CoinGecko token list for Polygon at most once a day, then reads your balances on the blockchain. Your address is never sent to CoinGecko.",
   "detail.valueChange": "Balance change",
   "detail.valueChangeHint": "The balances of this token change on their own (rebasing, reflections…): the lock receives its share.",
+  "settings.sourceCode": "Source code (GitHub)",
 } as const;
 
 export type TKey = keyof typeof en;

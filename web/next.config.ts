@@ -4,21 +4,7 @@ import type { NextConfig } from "next";
 const isDev = process.env.NODE_ENV !== "production";
 
 function configuredHttpOrigins(): string[] {
-  const urls = [
-    process.env.NEXT_PUBLIC_INDEXER_URL,
-    process.env.NEXT_PUBLIC_LOCAL_RPC_URL,
-    process.env.NEXT_PUBLIC_POLYGON_RPC_URL,
-    process.env.NEXT_PUBLIC_POLYGON_AMOY_RPC_URL,
-    process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL,
-    process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL,
-    process.env.NEXT_PUBLIC_MAINNET_RPC_URL,
-    process.env.NEXT_PUBLIC_BASE_RPC_URL,
-  ];
-  try {
-    const overrides: unknown = JSON.parse(process.env.NEXT_PUBLIC_RPC_URLS || "{}");
-    if (overrides && typeof overrides === "object") urls.push(...Object.values(overrides).map(String));
-  } catch {
-  }
+  const urls = [process.env.NEXT_PUBLIC_INDEXER_URL, process.env.NEXT_PUBLIC_LOCAL_RPC_URL, process.env.NEXT_PUBLIC_POLYGON_RPC_URL];
   const origins = new Set<string>();
   for (const url of urls) {
     try {

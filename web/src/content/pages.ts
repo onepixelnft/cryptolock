@@ -46,13 +46,11 @@ export const docs: Record<Lang, ProsePage> = {
       {
         title: "Networks and tokens",
         list: [
-          "The main network is Polygon, offered first everywhere; Polygon Amoy is its test network.",
-          "The production contracts avoid the most recent EVM opcodes, so they run on any EVM network. The app knows about some ninety networks; a network becomes usable as soon as the protocol is deployed on it, the others are listed as not deployed.",
-          "zkSync-based networks (zkSync Era, Abstract) are not supported: they do not run standard EVM bytecode.",
+          "CryptoLock runs on Polygon only: every lock, fee and price is on Polygon, and the native coin is POL.",
           "Every ERC-20 token can be locked, without any list. The tokens your wallet holds are detected automatically; any other one can be added by contract address in the creation flow (it is remembered on your device). Tokens without a reliable price feed are shown without a dollar value.",
           "Tokens whose balances change on their own work as expected: the locks of a token share a pool, so a rebase or a reflection (stETH, aTokens, reflection tokens…) goes to each lock pro rata, and fee-on-transfer tokens are recorded as actually received.",
           "Coins of other blockchains (Bitcoin, Solana, XRP…) cannot be held by an EVM contract as such: lock their version issued on the network instead, such as WBTC for bitcoin or Wormhole SOL on Polygon.",
-          "On networks where an ERC-20 contract mirrors the native coin (POL on Polygon, CELO on Celo…), the native coin is locked directly and that mirror is refused, so the two can never be mixed up.",
+          "On Polygon, an ERC-20 contract mirrors POL (0x…1010): POL is locked directly as the native coin and that mirror is refused, so the two can never be mixed up.",
         ],
       },
       {
@@ -147,13 +145,11 @@ export const docs: Record<Lang, ProsePage> = {
       {
         title: "Réseaux et tokens",
         list: [
-          "Le réseau principal est Polygon, proposé en premier partout ; Polygon Amoy est son réseau de test.",
-          "Les contrats de production n'utilisent pas les opcodes EVM les plus récents : ils fonctionnent sur tout réseau EVM. L'application connaît environ quatre-vingt-dix réseaux ; un réseau devient utilisable dès que le protocole y est déployé, les autres sont affichés comme non déployés.",
-          "Les réseaux basés sur zkSync (zkSync Era, Abstract) ne sont pas pris en charge : ils n'exécutent pas le bytecode EVM standard.",
+          "CryptoLock fonctionne uniquement sur Polygon : verrouillages, frais et prix sont tous sur Polygon, et la monnaie native est le POL.",
           "Tous les tokens ERC-20 peuvent être verrouillés, sans aucune liste. Les tokens de votre wallet sont détectés automatiquement ; tout autre token peut être ajouté par son adresse de contrat dans le parcours de création (il est mémorisé sur votre appareil). Les tokens sans flux de prix fiable sont affichés sans valeur en dollars.",
           "Les tokens dont les soldes varient d'eux-mêmes fonctionnent normalement : les verrouillages d'un même token partagent une réserve, si bien qu'un rebasage ou une réflexion (stETH, aTokens, tokens à réflexion…) revient à chaque verrouillage au prorata, et les tokens à frais de transfert sont enregistrés pour le montant réellement reçu.",
           "Les cryptos d'autres blockchains (Bitcoin, Solana, XRP…) ne peuvent pas être détenues telles quelles par un contrat EVM : verrouillez leur version émise sur le réseau, comme le WBTC pour le bitcoin ou le SOL Wormhole sur Polygon.",
-          "Sur les réseaux où un contrat ERC-20 reflète la monnaie native (POL sur Polygon, CELO sur Celo…), la monnaie native est verrouillée directement et ce reflet est refusé : les deux ne peuvent jamais être confondus.",
+          "Sur Polygon, un contrat ERC-20 reflète le POL (0x…1010) : le POL est verrouillé directement comme monnaie native et ce reflet est refusé, les deux ne peuvent jamais être confondus.",
         ],
       },
       {
@@ -257,7 +253,7 @@ export const terms: Record<Lang, ProsePage> = {
         list: [
           "Smart contracts can contain undiscovered bugs. Do not lock assets you cannot afford to lose.",
           "The interface may be unavailable at times; the contracts remain usable directly on-chain.",
-          "Networks where the protocol is not deployed are displayed as unavailable.",
+          "CryptoLock is available on Polygon only; other networks are not supported.",
         ],
       },
     ],
@@ -301,7 +297,7 @@ export const terms: Record<Lang, ProsePage> = {
         list: [
           "Les smart contracts peuvent contenir des failles non découvertes. Ne verrouillez pas d'actifs que vous ne pouvez pas vous permettre de perdre.",
           "L'interface peut être momentanément indisponible ; les contrats restent utilisables directement on-chain.",
-          "Les réseaux où le protocole n'est pas déployé sont affichés comme indisponibles.",
+          "CryptoLock est disponible uniquement sur Polygon ; les autres réseaux ne sont pas pris en charge.",
         ],
       },
     ],
@@ -334,7 +330,7 @@ export const security: Record<Lang, ProsePage> = {
           "Fees are collected by the contracts themselves and sent to the treasury; displayed fees are computed by the contracts.",
           "The transaction that creates a lock carries the terms you reviewed (staking vault, fee range and, for a Wallet Lock, the fee asset list). If the administrator changed them in the meantime, the contract refuses it and nothing is locked; the app then shows the new terms for you to accept again.",
           "If a staking vault cannot pay out at maturity (paused, withdrawal limit, missing liquidity), you can take the vault shares themselves, without fee, and redeem them later with the vault.",
-          "Production bytecode is checked by an automated test to contain no opcode newer than the Paris fork, so it behaves the same on every EVM network.",
+          "Production bytecode is checked by an automated test to contain no opcode newer than the Paris fork, so it behaves the same whatever the Polygon upgrades.",
         ],
       },
       {
@@ -342,7 +338,7 @@ export const security: Record<Lang, ProsePage> = {
         list: [
           "A Content-Security-Policy only allows scripts served by the site itself: no third-party script, no plugin, and the site cannot be embedded in another page.",
           "Contracts deployed with an older interface version are never used: the network is shown as needing a redeployment instead.",
-          "Token detection downloads public token lists only (CoinGecko, Uniswap, Superchain), at most once a day: your address is never sent to them, and the balances, names and decimals shown are read from the blockchain. Detection can be turned off in the settings.",
+          "Token detection downloads the public CoinGecko token list for Polygon only, at most once a day: your address is never sent to CoinGecko, and the balances, names and decimals shown are read from the blockchain. Detection can be turned off in the settings.",
         ],
       },
       {
@@ -357,7 +353,7 @@ export const security: Record<Lang, ProsePage> = {
       {
         title: "Audit status",
         paragraphs: [
-          "The contracts come with an automated test suite covering locking, maturity, early unlock fees, staking, pausing, reentrancy, approvals tracking and recovery. They have NOT yet been audited by an independent firm. Until an audit is completed and published, use test networks (Polygon Amoy), and on a main network — Polygon included — only lock amounts you can afford to lose.",
+          "The contracts come with an automated test suite covering locking, maturity, early unlock fees, staking, pausing, reentrancy, approvals tracking and recovery. They have NOT yet been audited by an independent firm. Until an audit is completed and published, only lock amounts you can afford to lose.",
         ],
       },
       {
@@ -393,7 +389,7 @@ export const security: Record<Lang, ProsePage> = {
           "Les frais sont prélevés par les contrats eux-mêmes et envoyés à la trésorerie ; les frais affichés sont calculés par les contrats.",
           "La transaction qui crée un verrouillage contient les conditions que vous avez vérifiées (vault de staking, plage de frais et, pour un Wallet Lock, la liste d'actifs facturés). Si l'administrateur les a changées entre-temps, le contrat la refuse et rien n'est verrouillé ; l'application affiche alors les nouvelles conditions, à accepter de nouveau.",
           "Si un vault de staking ne peut pas rembourser à l'échéance (en pause, limite de retrait, liquidité insuffisante), vous pouvez recevoir directement les parts du vault, sans frais, et les échanger plus tard auprès du vault.",
-          "Un test automatique vérifie que le bytecode de production ne contient aucun opcode postérieur au fork Paris : il se comporte de la même façon sur tous les réseaux EVM.",
+          "Un test automatique vérifie que le bytecode de production ne contient aucun opcode postérieur au fork Paris : il se comporte de la même façon quelles que soient les mises à jour de Polygon.",
         ],
       },
       {
@@ -401,7 +397,7 @@ export const security: Record<Lang, ProsePage> = {
         list: [
           "Une Content-Security-Policy n'autorise que les scripts servis par le site lui-même : aucun script tiers, aucun plugin, et le site ne peut pas être intégré dans une autre page.",
           "Des contrats déployés avec une ancienne version d'interface ne sont jamais utilisés : le réseau est affiché comme devant être redéployé.",
-          "La détection des tokens télécharge uniquement des listes publiques (CoinGecko, Uniswap, Superchain), au plus une fois par jour : votre adresse ne leur est jamais envoyée, et les soldes, noms et décimales affichés sont lus sur la blockchain. Elle peut être désactivée dans les paramètres.",
+          "La détection des tokens télécharge uniquement la liste publique de tokens Polygon de CoinGecko, au plus une fois par jour : votre adresse ne lui est jamais envoyée, et les soldes, noms et décimales affichés sont lus sur la blockchain. Elle peut être désactivée dans les paramètres.",
         ],
       },
       {
@@ -416,7 +412,7 @@ export const security: Record<Lang, ProsePage> = {
       {
         title: "État de l'audit",
         paragraphs: [
-          "Les contrats sont accompagnés d'une suite de tests automatisés couvrant verrouillage, échéance, frais anticipés, staking, pause, réentrance, suivi des autorisations et récupération. Ils n'ont PAS encore été audités par un cabinet indépendant. Tant qu'un audit n'est pas réalisé et publié, utilisez les réseaux de test (Polygon Amoy) et, sur un réseau principal — Polygon compris —, ne verrouillez que des montants que vous pouvez vous permettre de perdre.",
+          "Les contrats sont accompagnés d'une suite de tests automatisés couvrant verrouillage, échéance, frais anticipés, staking, pause, réentrance, suivi des autorisations et récupération. Ils n'ont PAS encore été audités par un cabinet indépendant. Tant qu'un audit n'est pas réalisé et publié, ne verrouillez que des montants que vous pouvez vous permettre de perdre.",
         ],
       },
       {
