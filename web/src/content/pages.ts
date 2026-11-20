@@ -359,7 +359,7 @@ export const security: Record<Lang, ProsePage> = {
       {
         title: "Reporting a vulnerability",
         paragraphs: [
-          "Please report any suspected vulnerability privately to the GitHub repository (Security tab), with enough detail to reproduce it, before any public disclosure.",
+          "Please report any suspected vulnerability privately through GitHub (github.com/onepixelnft/cryptolock, Security tab, \"Report a vulnerability\"), with enough detail to reproduce it, before any public disclosure.",
         ],
       },
     ],
@@ -418,7 +418,7 @@ export const security: Record<Lang, ProsePage> = {
       {
         title: "Signaler une vulnérabilité",
         paragraphs: [
-          "Signalez toute vulnérabilité suspectée en privé à the GitHub repository (Security tab), avec assez de détails pour la reproduire, avant toute divulgation publique.",
+          "Signalez toute vulnérabilité suspectée en privé via GitHub (github.com/onepixelnft/cryptolock, onglet Security, « Report a vulnerability »), avec assez de détails pour la reproduire, avant toute divulgation publique.",
         ],
       },
     ],
