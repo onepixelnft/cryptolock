@@ -1,4 +1,5 @@
 import { ethers } from "hardhat";
+import type { Contract } from "ethers";
 import { LIVE_NETWORKS } from "./networks";
 import { readDeployments } from "./lib/deployment-file";
 
@@ -12,7 +13,77 @@ const configAbi = [
   "function setEarlyUnlockFee(uint16, uint16)",
   "function transferOwnership(address)",
   "function acceptOwnership()",
+  "function wrappedNative() view returns (address)",
+  "function stakingVaultOf(address) view returns (address)",
+  "function setStakingVault(address, address)",
 ];
+
+const vaultAbi = [
+  "function asset() view returns (address)",
+  "function name() view returns (string)",
+  "function symbol() view returns (string)",
+  "function totalAssets() view returns (uint256)",
+];
+
+const tokenAbi = ["function symbol() view returns (string)", "function decimals() view returns (uint8)"];
+
+type StakingChange = { token: string; label: string; current: string; next: string };
+
+async function readStakingChange(config: Contract): Promise<StakingChange | undefined> {
+  const rawToken = process.env.ADMIN_STAKING_TOKEN?.trim();
+  const rawVault = process.env.ADMIN_STAKING_VAULT?.trim();
+  if (!rawToken && !rawVault) return undefined;
+  if (!rawToken) throw new Error("ADMIN_STAKING_TOKEN: give the token address (or POL) for the staking vault.");
+  if (!rawVault) throw new Error("ADMIN_STAKING_VAULT: give the vault address, or NONE to turn staking off for this token.");
+
+  const native = rawToken.toUpperCase() === "POL";
+  if (!native && (!ethers.isAddress(rawToken) || same(rawToken, ethers.ZeroAddress))) {
+    throw new Error(`ADMIN_STAKING_TOKEN: "${rawToken}" is not a valid address (or POL).`);
+  }
+  const token = native ? ethers.ZeroAddress : ethers.getAddress(rawToken);
+  const expectedAsset = native ? ((await config.wrappedNative()) as string) : token;
+  if (native && same(expectedAsset, ethers.ZeroAddress)) throw new Error("POL staking needs a wrapped POL address, which this deployment does not have.");
+  if (!native && (await ethers.provider.getCode(token)) === "0x") throw new Error(`ADMIN_STAKING_TOKEN: ${token} is not a contract on this network.`);
+
+  let symbol = "POL";
+  let decimals = 18;
+  if (!native) {
+    const erc20 = new ethers.Contract(token, tokenAbi, ethers.provider);
+    symbol = await (erc20.symbol() as Promise<string>).catch(() => "token");
+    decimals = Number(await (erc20.decimals() as Promise<bigint>).catch(() => 18n));
+  }
+  const label = native ? "POL (staked as WPOL)" : `${symbol} ${token}`;
+  const current = (await config.stakingVaultOf(token)) as string;
+
+  if (rawVault.toUpperCase() === "NONE") {
+    if (same(current, ethers.ZeroAddress)) return { token, label, current, next: current };
+    return { token, label, current, next: ethers.ZeroAddress };
+  }
+  if (!ethers.isAddress(rawVault) || same(rawVault, ethers.ZeroAddress)) throw new Error(`ADMIN_STAKING_VAULT: "${rawVault}" is not a valid address (or NONE).`);
+  const vaultAddress = ethers.getAddress(rawVault);
+  if ((await ethers.provider.getCode(vaultAddress)) === "0x") throw new Error(`ADMIN_STAKING_VAULT: ${vaultAddress} is not a contract on this network.`);
+
+  const vault = new ethers.Contract(vaultAddress, vaultAbi, ethers.provider);
+  let asset: string;
+  try {
+    asset = (await vault.asset()) as string;
+  } catch {
+    throw new Error(`ADMIN_STAKING_VAULT: ${vaultAddress} is not an ERC-4626 vault (no asset()).`);
+  }
+  if (!same(asset, expectedAsset)) throw new Error(`ADMIN_STAKING_VAULT: this vault holds ${asset}, not ${expectedAsset}.`);
+
+  const [name, vaultSymbol, totalAssets] = await Promise.all([
+    (vault.name() as Promise<string>).catch(() => "?"),
+    (vault.symbol() as Promise<string>).catch(() => "?"),
+    (vault.totalAssets() as Promise<bigint>).catch(() => undefined),
+  ]);
+  console.log("Staking vault checked:");
+  console.log(`  vault           ${name} (${vaultSymbol}) ${vaultAddress}`);
+  console.log(`  holds           ${label}`);
+  console.log(`  total deposited ${totalAssets === undefined ? "unknown" : `${ethers.formatUnits(totalAssets, decimals)} ${symbol}`}`);
+  console.log("  Only use a vault that is audited and widely used: locked funds deposited in it follow its risks.\n");
+  return { token, label, current, next: vaultAddress };
+}
 
 const same = (a: string, b: string) => a.toLowerCase() === b.toLowerCase();
 const percent = (bps: number) => `${bps / 100}%`;
@@ -81,12 +152,20 @@ async function main() {
   const nextMin = envBps("ADMIN_MIN_FEE_PERCENT", Number(cap)) ?? minFee;
   if (nextMin > nextMax) throw new Error("The fee just before the end cannot be higher than the fee right after locking.");
 
+  const staking = await readStakingChange(config);
+  const stakingChange = !!staking && !same(staking.current, staking.next);
+  if (staking && !stakingChange) console.log(`Staking for ${staking.label} is already ${same(staking.next, ethers.ZeroAddress) ? "off" : staking.next}.`);
+
   const changes: string[] = [];
   const treasuryChange = !!newTreasury && !same(newTreasury, treasury);
   const feeChange = nextMin !== minFee || nextMax !== maxFee;
   const ownerChange = !!newOwner && !same(newOwner, owner) && !same(newOwner, pendingOwner);
   if (treasuryChange) changes.push(`treasury -> ${newTreasury}`);
   if (feeChange) changes.push(`early unlock -> ${percent(nextMax)} right after locking, ${percent(nextMin)} just before the end (new locks only)`);
+  if (stakingChange) {
+    const off = same(staking!.next, ethers.ZeroAddress);
+    changes.push(`staking for ${staking!.label} -> ${off ? "off" : staking!.next} (new locks only; existing locks keep their vault)`);
+  }
   if (ownerChange) changes.push(`ownership -> ${newOwner} (it must then accept)`);
   if (changes.length === 0) {
     console.log("Nothing to change.");
@@ -103,6 +182,7 @@ async function main() {
   console.log("");
   if (treasuryChange) await send("treasury updated", () => admin.setTreasury(newTreasury));
   if (feeChange) await send("early-unlock fee updated", () => admin.setEarlyUnlockFee(nextMin, nextMax));
+  if (stakingChange) await send("staking vault updated", () => admin.setStakingVault(staking!.token, staking!.next));
   if (ownerChange) {
     await send("ownership transfer started", () => admin.transferOwnership(newOwner));
     console.log(`\nNext step: ${newOwner} must accept the ownership (lancer.bat, option 5).`);

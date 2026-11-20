@@ -60,7 +60,7 @@ echo      1. Launch the website on Polygon (production)
 echo         deploys the contracts first if they are not on Polygon yet
 echo      2. Free rehearsal of the deployment (local copy of Polygon, nothing is sent)
 echo      3. Deploy on Polygon (real coins)
-echo      4. Secure the protocol: new owner, new treasury, early-unlock fees
+echo      4. Protocol settings: owner, treasury, early-unlock fees, staking vaults
 echo      5. Accept the ownership (step 2, signed by the new owner)
 echo.
 echo    LOCAL DEVELOPMENT
@@ -302,6 +302,13 @@ set /p "ADMIN_NEW_TREASURY=  New treasury address, receiving the fees (0x...): "
 set /p "ADMIN_MAX_FEE_PERCENT=  Early-unlock fee right after locking, in percent, max 20: "
 set /p "ADMIN_MIN_FEE_PERCENT=  Early-unlock fee just before the end, in percent: "
 echo.
+echo  Staking: give a token address - or POL - and its ERC-4626 vault address - or NONE to turn it off.
+echo  Only use an audited, widely used vault. Press Enter twice to skip.
+set "ADMIN_STAKING_TOKEN="
+set "ADMIN_STAKING_VAULT="
+set /p "ADMIN_STAKING_TOKEN=  Token to stake (0x... or POL): "
+if not "%ADMIN_STAKING_TOKEN%"=="" set /p "ADMIN_STAKING_VAULT=  Staking vault for this token (0x... or NONE): "
+echo.
 set "ADMIN_ACTION=plan"
 pushd "%ROOT%contracts"
 call npx hardhat run scripts/admin.ts --network polygon <nul
@@ -351,6 +358,8 @@ set "ADMIN_NEW_OWNER="
 set "ADMIN_NEW_TREASURY="
 set "ADMIN_MAX_FEE_PERCENT="
 set "ADMIN_MIN_FEE_PERCENT="
+set "ADMIN_STAKING_TOKEN="
+set "ADMIN_STAKING_VAULT="
 goto back_to_menu
 
 

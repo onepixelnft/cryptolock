@@ -43,7 +43,7 @@ full menu:
 | **1** | **Launch the website on Polygon** (production); deploys the contracts first if needed |
 | 2 | Free rehearsal of the deployment on a local copy of Polygon (real tokens and prices, nothing sent, real cost shown) |
 | 3 | Deploy on Polygon (real coins, type `YES` to confirm) |
-| 4 | **Secure the protocol**: new owner, new treasury, early-unlock fees (plan first, then `YES`) |
+| 4 | **Protocol settings**: new owner, new treasury, early-unlock fees, staking vault per token (plan first, then `YES`) |
 | 5 | Accept the ownership (step 2, signed by the new owner) |
 | 6 / 7 / 8 | Start everything locally / open the website / stop everything |
 | 9 / 10 | Move the local blockchain time forward / simulate yield on the test vaults |
@@ -102,6 +102,9 @@ funds; pausing only blocks new locks.
   directly as the native coin.
 - **Terms bound to the transaction**: the lock transaction carries the reviewed staking vault and
   fee range; if the administrator changed them, it reverts and the app shows the new terms.
+- **Staking vaults**: staking is off until the owner sets an ERC-4626 vault for a token with option 4
+  (token address or `POL`, then the vault address, or `NONE` to turn it off). The script checks that
+  the vault really holds that token; choose only audited, widely used vaults.
 - **Blocked staking vault**: if the vault cannot redeem at maturity, `withdrawShares` hands the vault
   shares to the owner, free of charge.
 - **Token detection**: the website downloads the public CoinGecko token list for Polygon at most
