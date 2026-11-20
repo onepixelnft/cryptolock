@@ -160,6 +160,7 @@ function Wizard() {
         : null;
 
   const cryptoVault = asset ? terms?.stakingVaults[asset.key] : undefined;
+  const stakingComingSoon = !!terms && !Object.values(terms.stakingVaults).some(Boolean);
   useEffect(() => {
     if (step === 2 && type === "crypto" && terms && !cryptoVault) setStake(false);
   }, [step, type, terms, cryptoVault]);
@@ -526,6 +527,7 @@ function Wizard() {
             amount={amount ?? 0n}
             stake={stake}
             setStake={setStake}
+            comingSoon={stakingComingSoon}
             networkName={chain?.name ?? ""}
             chainId={chainId}
           />
@@ -539,6 +541,7 @@ function Wizard() {
             balances={accountBalances}
             selected={walletStakes}
             setSelected={setWalletStakes}
+            comingSoon={stakingComingSoon}
             networkName={chain?.name ?? ""}
             chainId={chainId}
           />
@@ -1294,6 +1297,7 @@ function StepCryptoStaking(props: {
   amount: bigint;
   stake: boolean | null;
   setStake: (value: boolean) => void;
+  comingSoon: boolean;
   networkName: string;
   chainId?: number;
 }) {
@@ -1302,7 +1306,13 @@ function StepCryptoStaking(props: {
   return (
     <section className="stack-24">
       <h2 className="h2">{t("create.staking.title")}</h2>
-      {!props.vault && <Notice>{t("create.staking.unavailable", { asset: props.asset.symbol, network: props.networkName })}</Notice>}
+      {!props.vault && (
+        <Notice>
+          {props.comingSoon
+            ? t("create.staking.comingSoonBody")
+            : t("create.staking.unavailable", { asset: props.asset.symbol, network: props.networkName })}
+        </Notice>
+      )}
       <div className="grid-lines choice-grid">
         <button
           type="button"
@@ -1311,6 +1321,7 @@ function StepCryptoStaking(props: {
           disabled={!props.vault}
           onClick={() => props.setStake(true)}
         >
+          {props.comingSoon && <span className="chip chip-solid">{t("create.staking.comingSoon")}</span>}
           <span className="choice-title">{t("create.staking.yes")}</span>
           <p className="muted">{t("create.staking.yesBody")}</p>
         </button>
@@ -1339,6 +1350,7 @@ function StepWalletStaking(props: {
   balances: Record<string, bigint> | undefined;
   selected: Record<string, boolean>;
   setSelected: (value: Record<string, boolean>) => void;
+  comingSoon: boolean;
   networkName: string;
   chainId?: number;
 }) {
@@ -1347,9 +1359,14 @@ function StepWalletStaking(props: {
     return (
       <section className="stack-24">
         <h2 className="h2">{t("create.staking.title")}</h2>
-        <Notice>{t("create.staking.unavailableWallet", { network: props.networkName })}</Notice>
+        <Notice>
+          {props.comingSoon
+            ? t("create.staking.comingSoonBody")
+            : t("create.staking.unavailableWallet", { network: props.networkName })}
+        </Notice>
         <div className="grid-lines choice-grid">
           <button type="button" className="choice" disabled>
+            {props.comingSoon && <span className="chip chip-solid">{t("create.staking.comingSoon")}</span>}
             <span className="choice-title">{t("create.staking.yes")}</span>
           </button>
           <button type="button" className="choice" aria-pressed>

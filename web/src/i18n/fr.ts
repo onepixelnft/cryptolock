@@ -157,6 +157,8 @@ export const fr: Record<TKey, string> = {
   "create.staking.no": "NON — Verrouillage seul",
   "create.staking.noBody": "Vos actifs sont simplement verrouillés pendant la période choisie. Aucun staking.",
   "create.staking.unavailable": "Le staking n'est pas disponible pour {asset} sur {network}.",
+  "create.staking.comingSoon": "Bientôt disponible",
+  "create.staking.comingSoonBody": "Le staking avec des vaults de rendement sélectionnés arrive bientôt. Pour l'instant, vos actifs sont simplement verrouillés.",
   "create.staking.unavailableWallet": "Aucun actif de votre Lock Account ne peut être staké sur {network}.",
   "create.staking.apy": "APY estimé",
   "create.staking.apyTrailing": "Sur les {days} derniers jours, d'après le prix de part on-chain du vault. Variable, jamais garanti.",

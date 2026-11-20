@@ -155,6 +155,8 @@ export const en = {
   "create.staking.no": "NO — Lock Only",
   "create.staking.noBody": "Your assets are simply locked for the chosen period. No staking.",
   "create.staking.unavailable": "Staking is not available for {asset} on {network}.",
+  "create.staking.comingSoon": "Coming soon",
+  "create.staking.comingSoonBody": "Staking with vetted yield vaults is coming soon. For now, your assets are simply locked.",
   "create.staking.unavailableWallet": "None of the assets in your Lock Account can be staked on {network}.",
   "create.staking.apy": "Estimated APY",
   "create.staking.apyTrailing": "Trailing {days} days, from the vault's on-chain share price. Variable, never guaranteed.",
