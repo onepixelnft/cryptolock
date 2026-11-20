@@ -180,7 +180,7 @@ const MAINNETS: LiveNetworkConfig[] = [
     ],
   }),
   network("polygon", c.polygon, {
-    rpcUrl: "https://polygon-bor-rpc.publicnode.com",
+    rpcUrl: "https://polygon.drpc.org",
     wrappedNative: wrapped("0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270", "WPOL", "WMATIC"),
     nativeTokenAlias: "0x0000000000000000000000000000000000001010",
     nativePriceFeed: POLYGON_POL_FEED,
@@ -435,7 +435,7 @@ const TESTNETS: LiveNetworkConfig[] = [
     tokens: [usdc("0x5fd84259d66Cd46123540766Be93DFE6D43130D7")],
   }),
   network("polygonAmoy", c.polygonAmoy, {
-    rpcUrl: "https://polygon-amoy-bor-rpc.publicnode.com",
+    rpcUrl: "https://polygon-amoy.drpc.org",
     wrappedNative: wrapped("0x360ad4f9a9A8EFe9A8DCB5f461c4Cc1047E1Dcf9", "WPOL", "WMATIC"),
     nativeTokenAlias: "0x0000000000000000000000000000000000001010",
     nftEarlyUnlockFee: ["0.01", "0.1"],

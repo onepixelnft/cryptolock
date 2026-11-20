@@ -142,7 +142,7 @@ function deployOne(net: LiveNetworkConfig, group: boolean, force: boolean): bool
   console.log(`\n${"=".repeat(78)}\n  ${label(net)} - chain ${net.chain.id}\n${"=".repeat(78)}`);
   const env: NodeJS.ProcessEnv = { ...process.env, FORCE_REDEPLOY: force ? "true" : "" };
   if (group) for (const name of RESUME_VARIABLES) env[name] = "";
-  const result = spawnSync("npx", ["hardhat", "run", "scripts/deploy.ts", "--network", net.key], {
+  const result = spawnSync(`npx hardhat run scripts/deploy.ts --network ${net.key}`, {
     cwd: hre.config.paths.root,
     env,
     stdio: "inherit",
