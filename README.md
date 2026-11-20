@@ -65,6 +65,19 @@ Dependencies are installed automatically on first use.
    included, asks for confirmation, then commits and pushes. Sign in to GitHub in the window that
    opens. Run it again later to publish updates.
 
+### Hosting the website on Vercel
+
+1. On https://vercel.com/new, sign in with GitHub and import `onepixelnft/cryptolock`.
+2. **Root Directory**: `web` (the framework is detected as Next.js).
+3. **Environment Variables**: `NEXT_PUBLIC_POLYGON_RPC_URL` = your Alchemy Polygon URL. The other
+   production settings come from `web/.env.production`.
+4. Deploy. Every later publication (option 21) redeploys the website automatically.
+5. Add the Vercel domain to the allowed domains of your Alchemy app and of your WalletConnect
+   (Reown) project.
+
+The website shows Polygon as "not deployed" until the contracts are deployed (option 4 or 1) and
+published again (option 21).
+
 ### Local development by hand
 
 ```powershell
